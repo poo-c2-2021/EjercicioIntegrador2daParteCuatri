@@ -15,7 +15,7 @@ namespace Core
 
         static ConexionDB()
         {
-            conexion = new SqlConnection(@"Data Source=DESKTOP-JSBRMN8;Database=Lucas;Trusted_Connection=True;"); 
+            conexion = new SqlConnection(@"Data Source=DESKTOP-JSBRMN8;Database=Lucas;Trusted_Connection=True;");
 
 
             comando = new SqlCommand();
@@ -24,21 +24,74 @@ namespace Core
 
         }
 
-        public static List<string> TraerDatos()
+        public static List<string> TraerDatos(string query)
         {
-            List<string> auxLista = new List<string>();
+            try
+            {
+                List<string> auxLista = new List<string>();
+                                              //0   
+                comando.CommandText = query;
 
-            comando.CommandText = "Select * from  Plantas";
+                if (conexion.State != ConnectionState.Open)
+                {
+                    conexion.Open();
+                }
 
+                reader = comando.ExecuteReader();
 
+                while (reader.Read())
+                {
+                    auxLista.Add(reader[0].ToString());
+                }
 
+                return auxLista;
+            }
+            catch (Exception ex)
+            {
+                // LOG
+                // INSERTES EL ERROR EN LA BASE DE DATOS 
 
+                throw;
+            }
 
+            finally
+            {
+                conexion.Close();
+            }
+        }
 
+        public static void Insertar(string nombre, string direccion) 
+        {
+            try
+            {
+                List<string> auxLista = new List<string>();
+                  
+                comando.CommandText = "Insert into Usuarios values (@Nombre, @Dire ) ";
+                comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@Nombre", nombre);
+                comando.Parameters.AddWithValue("@Dire", direccion);
 
+                if (conexion.State != ConnectionState.Open)
+                {
+                    conexion.Open();
+                }
 
+                comando.ExecuteNonQuery();
 
-            return auxLista;
+            }
+            catch (Exception ex)
+            {
+                // LOG
+                // INSERTES EL ERROR EN LA BASE DE DATOS 
+
+                throw;
+            }
+
+            finally
+            {
+                conexion.Close();
+            }
+
         }
 
 
