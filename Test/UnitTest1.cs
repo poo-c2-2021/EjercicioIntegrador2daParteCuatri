@@ -10,7 +10,7 @@ namespace Test
         [TestMethod]
         public void TestearConsulta()
         {
-            List<string> aux = ConexionDB.TraerDatos("Select * from Usuarios");
+            List<Pato> aux = ConexionDB.TraerDatosDelPato("Select * from Usuarios");
 
             Assert.IsTrue(aux.Count > 0);
 
